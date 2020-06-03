@@ -5,9 +5,7 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 const storage = multer.diskStorage({
@@ -23,7 +21,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-
 app.engine('.hbs', hbs({
     defaultLayout:'layout', 
     extname: 'hbs'
@@ -36,7 +33,6 @@ app.get('/', (req, res) => {
 })
 
 app.get('/images', (req, res) => {
-
     let fileNames = {}
     fs.readdirSync('./uploads').forEach((file, index) => {
         fileNames[index] = file
@@ -45,7 +41,6 @@ app.get('/images', (req, res) => {
     res.render('images', {fileNames})
 })
 
-
 app.post('/upload', upload.single('myfile'), (req, res) => {
     let uploadedfile = req.file.fieldname
     if (uploadedfile) {
@@ -53,9 +48,9 @@ app.post('/upload', upload.single('myfile'), (req, res) => {
     }
 })
 
-
-app.listen(3000,() => {
-    console.log('listening on port 3000');
+const PORT = 3000
+app.listen(PORT, () => {
+    console.log('listening on port');
 })
 
 
