@@ -3,7 +3,7 @@ const hbs = require('express-handlebars');
 const app = express();
 const path = require('path');
 const multer = require('multer');
-
+const fs = require('fs');
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,9 +35,16 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
-app.get('/images', (req, res) =>{
-    res.render('images')
+app.get('/images', (req, res) => {
+
+    let fileNames = {}
+    fs.readdirSync('./uploads').forEach((file, index) => {
+        fileNames[index] = file
+    })
+    console.log(fileNames)
+    res.render('images', {fileNames})
 })
+
 
 app.post('/upload', upload.single('myfile'), (req, res) => {
     let uploadedfile = req.file.fieldname
@@ -50,4 +57,6 @@ app.post('/upload', upload.single('myfile'), (req, res) => {
 app.listen(3000,() => {
     console.log('listening on port 3000');
 })
+
+
 
