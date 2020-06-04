@@ -9,20 +9,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      cb(null, path.join(__dirname, "/uploads"))
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, "/uploads"))
     },
-    filename: function(req, file, cb) {
-      console.log("file", file)
-      fileExtension = file.originalname.split(".")[1]
-      cb(null, file.fieldname + "-" + Date.now() + "." + fileExtension)
+    filename: function (req, file, cb) {
+        console.log("file", file)
+        fileExtension = file.originalname.split(".")[1]
+        cb(null, file.fieldname + "-" + Date.now() + "." + fileExtension)
     },
 })
 
 const upload = multer({ storage: storage })
 
 app.engine('.hbs', hbs({
-    defaultLayout:'layout', 
+    defaultLayout: 'layout',
     extname: 'hbs'
 }))
 
@@ -33,12 +33,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/images', (req, res) => {
-    let fileNames = {}
-    fs.readdirSync('./uploads').forEach((file, index) => {
-        fileNames[index] = file
-    })
-    console.log(fileNames)
-    res.render('images', {fileNames})
+    // let fileNames = {};
+    let fileNames = fs.readdirSync('./uploads');
+    // fs.readdirSync('./uploads').forEach((file, index) => {
+    //     fileNames[index] = file
+    // })
+    // console.log(fileNames)
+    res.render('images', { fileNames })
 })
 
 app.post('/upload', upload.single('myfile'), (req, res) => {
